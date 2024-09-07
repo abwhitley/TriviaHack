@@ -1,25 +1,27 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Timer from "./Timer";
+import AnswerChoice from "./AnswerChoice";
+import QuestionDisplay from "./QuestionDisplay";
+import {Grid2} from "@mui/material";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <Grid2 container spacing={2}>
+            <Grid2 size={4}>
+                <Timer />
+            </Grid2>
+            <Grid2 size={8}>
+                <QuestionDisplay question={"Do you know what you are doing?"} />
+            </Grid2>
+        </Grid2>
+        <AnswerChoice choiceLetter={"A"} text={"Random Answer that is close to right but wrong"}/>
+        <AnswerChoice choiceLetter={"B"} text={"Random Answer that is close to right but wrong"}/>
+        <AnswerChoice choiceLetter={"C"} text={"Random Answer that is close to right but wrong"}/>
+        <AnswerChoice choiceLetter={"D"} text={"Random Answer that is close to right but wrong"}/>
+    </>
   );
 }
 
