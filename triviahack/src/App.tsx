@@ -1,25 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 import Timer from "./Timer";
 import AnswerChoice from "./AnswerChoice";
 import QuestionDisplay from "./QuestionDisplay";
 import {Button, Grid2} from "@mui/material";
 import {TriviaData, TriviaQuestion, useQuestionHook} from "./apiClient";
-import questionDisplay from "./QuestionDisplay";
 
 function App() {
 
     const { getQuestion } = useQuestionHook();
 
-    const [questions, setQuestions] = useState<TriviaData | undefined>(undefined)
-    const [currentQuestion, setCurrentQuestion] = useState<TriviaQuestion | undefined>(undefined)
+    const [questions, setQuestions] = useState<TriviaData | undefined>(undefined);
+    const [currentQuestion, setCurrentQuestion] = useState<TriviaQuestion | undefined>(undefined);
+    const [correctAnswer, setCorrectAnswer] = useState<string>("");
+    const [allAnswerChoices, setAllAnswerChoices] = useState<string[]>([""]);
 
     const handleStartGame = () => {
-        getQuestion().then(r => setQuestions(r))
-        // console.log(JSON.stringify(questions));
-        console.log(questions?.results[0].question)
-        questions ? setCurrentQuestion(questions.results[0]) : setCurrentQuestion(undefined)
+        getQuestion().then(r => setQuestions(r));
+        questions ? setCurrentQuestion(questions.results[0]) : setCurrentQuestion(undefined);
+        questions ? setCorrectAnswer(questions.results[0].correct_answer) : setCorrectAnswer("Error");
+        questions ? setAllAnswerChoices([...questions.results[0].incorrect_answers, questions.results[0].correct_answer]) : setAllAnswerChoices(["Error"]);
     }
 
   return (
@@ -32,10 +32,41 @@ function App() {
                 <QuestionDisplay question={currentQuestion ? currentQuestion.question : "Wait One Moment"} />
             </Grid2>
             <Grid2 size={12}>
-                <AnswerChoice choiceLetter={"A"} text={currentQuestion ? currentQuestion.incorrect_answers[0] : "Wait One Moment"}/>
-                <AnswerChoice choiceLetter={"B"} text={currentQuestion ? currentQuestion.incorrect_answers[1] : "Wait One Moment"}/>
-                <AnswerChoice choiceLetter={"C"} text={currentQuestion ? currentQuestion.incorrect_answers[2] : "Wait One Moment"}/>
-                <AnswerChoice choiceLetter={"D"} text={currentQuestion ? currentQuestion.correct_answer : "Wait One Moment"}/>
+                {
+                    allAnswerChoices.map((choice, key) => {
+                        let letter : string = "A"
+                        let index: number = allAnswerChoices.indexOf(choice);
+
+                        switch (index){
+                            case 0:
+                                letter = "A";
+                                break;
+                            case 1:
+                                letter = "B"
+                                break;
+                            case 2:
+                                letter = "C"
+                                break;
+                            case 3:
+                                letter = "D"
+                                break;
+                            default:
+                                letter = "Error"
+                                break;
+                        }
+                        console.log(letter)
+                        console.log(index)
+                        return(
+                            <>
+                                <AnswerChoice choiceLetter={letter} text={choice}/>
+                            </>
+                        );
+                    })
+                }
+                {/*<AnswerChoice choiceLetter={"A"} text={currentQuestion ? currentQuestion.incorrect_answers[0] : "Wait One Moment"}/>*/}
+                {/*<AnswerChoice choiceLetter={"B"} text={currentQuestion ? currentQuestion.incorrect_answers[1] : "Wait One Moment"}/>*/}
+                {/*<AnswerChoice choiceLetter={"C"} text={currentQuestion ? currentQuestion.incorrect_answers[2] : "Wait One Moment"}/>*/}
+                {/*<AnswerChoice choiceLetter={"D"} text={currentQuestion ? currentQuestion.correct_answer : "Wait One Moment"}/>*/}
             </Grid2>
             <Grid2 size={12}>
                 <Button variant='contained' onClick={handleStartGame}>New Game</Button>
