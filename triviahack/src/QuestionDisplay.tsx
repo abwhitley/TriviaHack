@@ -4,12 +4,12 @@ interface QuestionDisplayProps {
     question: string
 }
 
-const QuestionDisplay = ({question}:QuestionDisplayProps) => {
+const QuestionDisplay = ({ question }: QuestionDisplayProps) => {
     return(
         <>
-            <Card sx={{height: "100%"}}>
+            <Card sx={{ height: "100%" }}>
                 <CardContent>
-                    <Typography variant='h4'>{question}</Typography>
+                    <Typography variant='h4'>{ question }</Typography>
                 </CardContent>
             </Card>
         </>

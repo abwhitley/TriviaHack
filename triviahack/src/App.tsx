@@ -24,17 +24,17 @@ function App() {
 
   return (
     <>
-        <Grid2 container spacing={2}>
-            <Grid2 size={4}>
+        <Grid2 container spacing={ 2 }>
+            <Grid2 size={ 4 }>
                 <Timer />
             </Grid2>
-            <Grid2 size={8}>
-                <QuestionDisplay question={currentQuestion ? currentQuestion.question : "Wait One Moment"} />
+            <Grid2 size={ 8 }>
+                <QuestionDisplay question={ currentQuestion ? currentQuestion.question : "Wait One Moment" } />
             </Grid2>
-            <Grid2 size={12}>
+            <Grid2 size={ 12 }>
                 {
                     allAnswerChoices.map((choice, key) => {
-                        let letter : string = "A"
+                        let letter : string = "A";
                         let index: number = allAnswerChoices.indexOf(choice);
 
                         switch (index){
@@ -42,34 +42,28 @@ function App() {
                                 letter = "A";
                                 break;
                             case 1:
-                                letter = "B"
+                                letter = "B";
                                 break;
                             case 2:
-                                letter = "C"
+                                letter = "C";
                                 break;
                             case 3:
-                                letter = "D"
+                                letter = "D";
                                 break;
                             default:
-                                letter = "Error"
+                                letter = "Error";
                                 break;
                         }
-                        console.log(letter)
-                        console.log(index)
                         return(
                             <>
-                                <AnswerChoice choiceLetter={letter} text={choice}/>
+                                <AnswerChoice choiceLetter={ letter } text={ choice }/>
                             </>
                         );
                     })
                 }
-                {/*<AnswerChoice choiceLetter={"A"} text={currentQuestion ? currentQuestion.incorrect_answers[0] : "Wait One Moment"}/>*/}
-                {/*<AnswerChoice choiceLetter={"B"} text={currentQuestion ? currentQuestion.incorrect_answers[1] : "Wait One Moment"}/>*/}
-                {/*<AnswerChoice choiceLetter={"C"} text={currentQuestion ? currentQuestion.incorrect_answers[2] : "Wait One Moment"}/>*/}
-                {/*<AnswerChoice choiceLetter={"D"} text={currentQuestion ? currentQuestion.correct_answer : "Wait One Moment"}/>*/}
             </Grid2>
-            <Grid2 size={12}>
-                <Button variant='contained' onClick={handleStartGame}>New Game</Button>
+            <Grid2 size={ 12 }>
+                <Button variant='contained' onClick={ handleStartGame }>New Game</Button>
             </Grid2>
         </Grid2>
 
