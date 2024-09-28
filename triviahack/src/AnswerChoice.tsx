@@ -1,29 +1,43 @@
 import {Button, Card, CardContent, Grid2} from "@mui/material";
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 
 interface AnswerChoice {
     text: string,
-    choiceLetter: string
+    choiceLetter: string,
+    userChoice: string,
+    setUserChoice: (a:string) => void,
+    buttonSelected: string,
+    setButtonSelected: (a:string) => void,
 }
 
-const AnswerChoice = ({ text,choiceLetter }: AnswerChoice) => {
-    const [userChoice, setUserChoice] = useState<string>("Error")
-    let style = { color:"" };
+const AnswerChoice = ({ text,choiceLetter,userChoice, setUserChoice, buttonSelected, setButtonSelected }: AnswerChoice) => {
+    const [buttonStyle, setButtonStyle] = useState<"text" | "contained" | "outlined" |undefined>("outlined");
 
-    if(choiceLetter === userChoice){
-        style = { color:"blue" };
-    }
+    useEffect(() => {
+        if (buttonSelected === choiceLetter){
+            setButtonStyle("contained")
+        } else {
+            setButtonStyle("outlined")
+        }
+    }, [buttonSelected]);
+
+    let style = {ml:2, mt:1};
+
+    text = text.replace("&quot;","\"").replace("&#039;", "'").replace("&quot;","\"").replace("&#039;", "'").replace("&#039;", "'");
+
 
     return (
         <>
-            <Grid2 container spacing={ 2 }>
+            <Grid2 container spacing={ 1 } sx={{mt:2}}>
                 <Grid2 size={ 1 }>
-                    <Button variant="outlined" sx={{ style }} onClick={() => {
-                        setUserChoice(choiceLetter);
-                    }}>{ choiceLetter }</Button>
+                    {/*<Button variant="outlined" sx={{ style }} onClick={handleClick}>{ choiceLetter }</Button>*/}
+                    <Button variant={buttonStyle} sx={style} onClick={() => {
+                            setButtonSelected(choiceLetter)
+                        }}>{choiceLetter}</Button>
                 </Grid2>
-                <Grid2 size={ 10 }>
-                    <Card>
+                <Grid2 size={1}><></></Grid2>
+                <Grid2 size={ 8 }>
+                    <Card sx={{backgroundColor:"rgb(80, 140, 155)"}}>
                         <CardContent>
                             { text }
                         </CardContent>

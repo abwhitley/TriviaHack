@@ -25,7 +25,6 @@ export const useQuestionHook = ():UseQuestionHook => {
         const measure = (performance.now() - ts).toFixed(0);
         console.info(`[GET] time to receive data ${measure}ms`);
 
-        console.log(response.data);
         return response.data as TriviaData;
     }, []);
 

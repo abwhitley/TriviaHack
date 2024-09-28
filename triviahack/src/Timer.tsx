@@ -69,12 +69,12 @@ const Timer = () => {
         // </Grid>
         <Grid2 container spacing={2}>
             <Grid2 size={8}>
-                <Typography variant='h1'>{ time }s</Typography>
+                <Typography variant='h1' sx={{ml:2}}>{ time }s</Typography>
             </Grid2>
             <Grid2 size={8}>
-                <Button variant='contained' sx={{ mr: 2 }} onClick={ handleStart } disabled={ isActive || time === 0 }>Start</Button>
-                <Button variant='contained' sx={{ mr: 2 }} onClick={ handlePause } disabled={ !isActive }>Pause</Button>
-                <Button variant='contained' onClick={ handleReset } disabled={ time === countDownFrom && !isActive }>Reset</Button>
+                <Button variant='contained' sx={{ mr: 2, ml: 2 }} onClick={ handleStart } disabled={ isActive || time === 0 }>Start</Button>
+                {/*<Button variant='contained' sx={{ mr: 2 }} onClick={ handlePause } disabled={ !isActive }>Pause</Button>*/}
+                {/*<Button variant='contained' onClick={ handleReset } disabled={ time === countDownFrom && !isActive }>Reset</Button>`*/}
             </Grid2>
         </Grid2>
     );

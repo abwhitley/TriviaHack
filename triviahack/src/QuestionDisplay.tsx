@@ -5,9 +5,14 @@ interface QuestionDisplayProps {
 }
 
 const QuestionDisplay = ({ question }: QuestionDisplayProps) => {
+
+    // Fix "" appearing
+    // un URL encode?
+    question = question.replace("&quot;","\"").replace("&#039;", "'").replace("&quot;","\"").replace("&#039;", "'");
+
     return(
         <>
-            <Card sx={{ height: "100%" }}>
+            <Card sx={{ height: "100%", backgroundColor:"rgb(19, 75, 112)"}}>
                 <CardContent>
                     <Typography variant='h4'>{ question }</Typography>
                 </CardContent>
