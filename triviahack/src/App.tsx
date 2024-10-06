@@ -3,9 +3,11 @@ import './App.css';
 import Timer from "./Timer";
 import AnswerChoice from "./AnswerChoice";
 import QuestionDisplay from "./QuestionDisplay";
-import {Button, Grid2} from "@mui/material";
+import {Button, Card, CardContent, Grid2, Typography} from "@mui/material";
 import {TriviaData, TriviaQuestion, useQuestionHook} from "./apiClient";
 import {all} from "axios";
+import {queryByRole} from "@testing-library/react";
+import IconRow from "./IconRow";
 
 function App() {
 
@@ -18,6 +20,11 @@ function App() {
     const [userChoice, setUserChoice] = useState<string>("");
     const [buttonSelected, setButtonSelected] = useState<string>("");
     let letter : string = "A";
+    const [answerSelected, setAnswerSelected] = useState<string>("");
+    const [index, setIndex] = useState(0);
+    const [areAnswersCorrect, setAreAnswersCorrect] = useState<boolean[]>([]);
+    const [score, setScore] = useState(0);
+    const [showScore, setShowScore] = useState(false);
 
 
     const handleStartGame = useCallback(() => {
@@ -27,22 +34,63 @@ function App() {
                 setQuestions((prevState) => {
                     // console.log("Made it in the setQuestions")
                     // console.log(`This is R: ${JSON.stringify(r)}`)
-                    setCurrentQuestion(r.results[0]);
-                    setCorrectAnswer(r.results[0].correct_answer);
-                    setAllAnswerChoices([...r.results[0].incorrect_answers, r.results[0].correct_answer]);
+                    setCurrentQuestion(r.results[index]);
+                    setCorrectAnswer(r.results[index].correct_answer);
+                    setAllAnswerChoices([...r.results[index].incorrect_answers, r.results[index].correct_answer]);
                     return r
                 })
 
         })
+    },[index])
 
-        // questions ? setCurrentQuestion(questions.results[0]) : setCurrentQuestion(undefined);
-        // questions ? setCorrectAnswer(questions.results[0].correct_answer) : setCorrectAnswer("Error");
-        // questions ? setAllAnswerChoices([...questions.results[0].incorrect_answers, questions.results[0].correct_answer]) : setAllAnswerChoices(["Error"]);
-    },[questions, currentQuestion, correctAnswer, allAnswerChoices])
+    // useEffect(() => {
+    //     if(currentQuestion){
+    //         setCorrectAnswer(currentQuestion.correct_answer)
+    //         setAllAnswerChoices([...currentQuestion.incorrect_answers, currentQuestion.correct_answer])
+    //     }
+    // }, [currentQuestion]);
 
     useEffect(() => {
+        if(index === 9){
+            determineScore()
+        } else {
+            changeQuestion()
+        }
+    }, [index]);
 
-    }, [questions, currentQuestion, correctAnswer, allAnswerChoices]);
+
+    const changeQuestion = () => {
+        if (questions){
+            setAllAnswerChoices(()=> {
+                setCurrentQuestion(questions.results[index]);
+                setCorrectAnswer(questions.results[index].correct_answer);
+                return [...questions.results[index].incorrect_answers, questions.results[index].correct_answer];
+            })
+        }
+    }
+
+    const determineScore = () => {
+        let questionsCorrect = 0
+        areAnswersCorrect.forEach((value) =>{
+            if(value){
+                questionsCorrect++;
+            }
+        })
+
+        setScore(questionsCorrect);
+    }
+
+    const displayScore = () => {
+        if(showScore){
+            return(
+                <Card>
+                    <CardContent>
+                        <Typography>You scored {score}/10</Typography>
+                    </CardContent>
+                </Card>
+            );
+        }
+    }
 
   return (
 
@@ -78,17 +126,47 @@ function App() {
                         }
                         return(
                             <>
-                                <AnswerChoice choiceLetter={ letter } text={ choice } userChoice={userChoice} setUserChoice={setUserChoice} buttonSelected={buttonSelected} setButtonSelected={setButtonSelected}/>
+                                <AnswerChoice choiceLetter={ letter } text={ choice } userChoice={userChoice} setUserChoice={setUserChoice} buttonSelected={buttonSelected} setButtonSelected={setButtonSelected} setAnswerSelected={setAnswerSelected} currentQuestion={currentQuestion}/>
                             </>
                         );
                     })
                 }
+            </Grid2>
+            <Grid2 size={2}>
+                <div></div>
+            </Grid2>
+            <Grid2 size={10}>
+                <IconRow areAnswersCorrect={areAnswersCorrect}/>
+            </Grid2>
+            <Grid2 size={1}>
+                <Button variant='contained' onClick={()=>{
+                    if(answerSelected === correctAnswer){
+                        console.log("You guessed Correct")
+                        setAreAnswersCorrect((prevState) => {
+                            setIndex(index + 1);
+                            return [...prevState, true]
+                        })
+                    } else {
+                        console.log("Incorrect")
+                        setAreAnswersCorrect((prevState) => {
+                            setIndex(index + 1);
+                            return [...prevState, false];
+                        })
+                    }
+
+                }}>Submit</Button>
             </Grid2>
             <Grid2 size={ 12 }>
                 <Button variant='contained' sx={{ml:2}} onClick={ () => {
                     handleStartGame()
                 } }>New Game</Button>
             </Grid2>
+            <Grid2 size={12}>
+                {
+                    showScore
+                }
+            </Grid2>
+
         </Grid2>
 
     </div>
